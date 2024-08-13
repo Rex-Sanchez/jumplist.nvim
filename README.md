@@ -16,7 +16,7 @@ then bind the methods to the keymap you like.
     This opens a telescope picker,
     - <C-r> rename,
     - <C-d> remove the selected item,
-    - <C-c> clear jumplist,
+    - <C-x> clear jumplist,
     - <CR> jump to the file at line and col,
 
 ```lua
@@ -24,5 +24,21 @@ local j = require("jumplist").setup();
 
 vim.keymap.set("n", "<leader>ji", function() j:add_to_jump_list() end)
 vim.keymap.set("n", "<leader>jj", function() j:picker() end)
+
+```
+
+## Default Options
+
+Options can be passed to the setup function 
+the following are the default options. change them to what you like,
+
+```lua
+local opts = {
+    map = {
+      rename = "<C-r>",
+      remove = "<C-d>",
+      clear_all = "<C-x>",
+    }
+  }
 
 ```

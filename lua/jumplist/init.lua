@@ -41,7 +41,15 @@ end
 local M = {}
 
 
-function M.setup()
+function M.setup(user_opts)
+  local opts = {
+    map = {
+      rename = user_opts.map.renmae or "<C-r>",
+      remove = user_opts.map.remove or "<C-d>",
+      clear_all = user_opts.map.clear_all or "<C-x>",
+    }
+  }
+
   local Jump_list = {
 
     Jumplist = {},
@@ -68,12 +76,12 @@ function M.setup()
             actions.close(pb)
             self.open_from_jumplist_at_index(selected.ordinal);
           end)
-          map({ 'n', 'i' }, '<C-d>', function()
+          map({ 'n', 'i' }, opts.map.remove, function()
             local selected = action_state.get_selected_entry();
             self.Jumplist = filter(self.Jumplist, function(i) return i.id ~= selected.ordinal.id end)
             actions.close(pb)
           end)
-          map({ 'n', 'i' }, '<C-r>', function()
+          map({ 'n', 'i' }, opts.map.rename, function()
             local selected = action_state.get_selected_entry();
             vim.print("rename selected")
             local name = take_input("Enter new name: ");
@@ -84,7 +92,7 @@ function M.setup()
             end
             actions.close(pb)
           end)
-          map({ 'n', 'i' }, '<C-c>', function()
+          map({ 'n', 'i' }, opts.map.clear_all, function()
             self.Jumplist = {};
             actions.close(pb)
           end)
@@ -124,7 +132,7 @@ function M.setup()
     end,
 
 
-    }
+  }
 
   return Jump_list
 end
