@@ -42,11 +42,14 @@ local M = {}
 
 
 function M.setup(user_opts)
+
+  local map = user_opts.map or {};
+
   local opts = {
     map = {
-      rename = user_opts.map.renmae or "<C-r>",
-      remove = user_opts.map.remove or "<C-d>",
-      clear_all = user_opts.map.clear_all or "<C-x>",
+      rename = map.rename or "<C-r>",
+      remove = map.remove or "<C-d>",
+      clear_all = map.clear_all or "<C-x>",
     }
   }
 
