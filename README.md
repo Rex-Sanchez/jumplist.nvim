@@ -1,5 +1,7 @@
 # This is a jumpllist plugin for neovim;
 
+## deps
+- *[telescope.nvim](https://github.com/nvim-telescope/telescope.nvim/tree/master)
 
 ## Configuration
 
@@ -10,26 +12,17 @@ then bind the methods to the keymap you like.
     This adds the current file in buffer with line and col num to the jumplist.
     you can name the item directly or just press enter, this will use the filename as a ident.
 
-- clear_from_jumplist
-    This removes the selected item from the jumplist.
-
-- clear_jump_list
-    This clears all items from the jumplist.
-
-- open_from_jumplist
-    Select a item and jump to it.
-
-- rename
-    rename a item in the jumplist
-
+- picker
+    This opens a telescope picker,
+    - <C-r> rename,
+    - <C-d> remove the selected item,
+    - <C-c> clear jumplist,
+    - <CR> jump to the file at line and col,
 
 ```lua
 local j = require("jumplist").setup();
 
 vim.keymap.set("n", "<leader>ji", function() j:add_to_jump_list() end)
-vim.keymap.set("n", "<leader>jd", function() j:clear_from_jumplist() end)
-vim.keymap.set("n", "<leader>jD", function() j:clear_jump_list() end)
-vim.keymap.set("n", "<leader>jj", function() j:open_from_jumplist() end)
-vim.keymap.set("n", "<leader>jr", function() j:rename() end)
+vim.keymap.set("n", "<leader>jj", function() j:picker() end)
 
 ```

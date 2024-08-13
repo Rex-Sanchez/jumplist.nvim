@@ -1,13 +1,21 @@
+local telescope = require('telescope.builtin')
+local pickers = require('telescope.pickers')
+local finders = require('telescope.finders')
+local actions = require('telescope.actions')
+local action_state = require('telescope.actions.state')
+
+
+
 local function take_input(text)
   local name = ""
   vim.ui.input({
     prompt = text,
-    -- default = "",
   }, function(input)
     name = input;
   end)
   return name;
 end
+
 
 local function get_name(item)
   local name = "";
@@ -37,6 +45,53 @@ function M.setup()
   local Jump_list = {
 
     Jumplist = {},
+
+    picker = function(self)
+      pickers.new({}, {
+        prompt_title = "Select an option",
+        finder = finders.new_table({
+          results = self.Jumplist,
+          entry_maker = function(entry)
+            return {
+              value = entry.id,
+              display = "[ " .. "Line: " .. entry.row .. ", " .. "Col: " .. entry.col .. " ] => " .. get_name(entry),
+              ordinal = entry,
+            }
+          end,
+        }),
+        sorter = nil,
+
+        attach_mappings = function(pb, map)
+          map({ 'n', 'i' }, '<CR>', function()
+            local selected = action_state.get_selected_entry();
+            vim.print(selected.ordinal);
+            actions.close(pb)
+            self.open_from_jumplist_at_index(selected.ordinal);
+          end)
+          map({ 'n', 'i' }, '<C-d>', function()
+            local selected = action_state.get_selected_entry();
+            self.Jumplist = filter(self.Jumplist, function(i) return i.id ~= selected.ordinal.id end)
+            actions.close(pb)
+          end)
+          map({ 'n', 'i' }, '<C-r>', function()
+            local selected = action_state.get_selected_entry();
+            vim.print("rename selected")
+            local name = take_input("Enter new name: ");
+            for i, _ in ipairs(self.Jumplist) do
+              if self.Jumplist[i].id == selected.ordinal.id then
+                self.Jumplist[i].name = name;
+              end
+            end
+            actions.close(pb)
+          end)
+          map({ 'n', 'i' }, '<C-c>', function()
+            self.Jumplist = {};
+            actions.close(pb)
+          end)
+          return true
+        end,
+      }):find()
+    end,
 
     add_to_jump_list = function(self)
       local r, c = unpack(vim.api.nvim_win_get_cursor(0));
@@ -69,74 +124,9 @@ function M.setup()
     end,
 
 
-    clear_jump_list = function(self)
-      self.Jumplist = {};
-    end,
-
-    open_from_jumplist = function(self)
-      vim.print(self.Jumplist);
-      if #self.Jumplist == 0 then
-        vim.print("No items in jumplist.");
-        return
-      end
-      vim.ui.select(self.Jumplist, {
-        prompt = "Open in buffer:",
-        format_item = function(item)
-          return "[ " .. "Line: " .. item.row .. ", " .. "Col: " .. item.col .. " ] => " .. get_name(item)
-        end
-      }, function(choice)
-        if (choice) then
-          self.open_from_jumplist_at_index(choice);
-        else
-          vim.print("No selection made");
-        end
-      end)
-    end,
-
-    rename = function(self)
-      vim.ui.select(self.Jumplist, {
-        prompt = "Rename item:",
-        on_confirm = function(item)
-          vim.print(item);
-        end,
-        format_item = function(item)
-          return "[ " .. "Line: " .. item.row .. ", " .. "Col: " .. item.col .. " ] => " .. get_name(item)
-        end
-      }, function(choice)
-        if (choice) then
-          local name = take_input("Enter new name: ");
-          for i, _ in ipairs(self.Jumplist) do
-            if self.Jumplist[i].id == choice.id then
-              self.Jumplist[i].name = name;
-            end
-          end
-        else
-          vim.print("No selection made");
-        end
-      end
-      )
-    end,
-    clear_from_jumplist = function(self)
-      vim.ui.select(self.Jumplist, {
-        prompt = "Remove Item from list:",
-        format_item = function(item)
-          return "[ " .. "Line: " .. item.row .. ", " .. "Col: " .. item.col .. " ] => " .. get_name(item)
-        end
-      }, function(choice)
-        if (choice) then
-          self.Jumplist = filter(self.Jumplist, function(jump) return jump.id ~= choice.id end);
-        else
-          vim.print("No selection made");
-        end
-      end
-      )
-    end,
-
-  }
+    }
 
   return Jump_list
 end
 
 return M
-
-
