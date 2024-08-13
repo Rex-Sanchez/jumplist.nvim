@@ -20,7 +20,7 @@ then bind the methods to the keymap you like.
     - <CR> jump to the file at line and col,
 
 ```lua
-local j = require("jumplist").setup();
+local j = require("jumplist").setup({});
 
 vim.keymap.set("n", "<leader>ji", function() j:add_to_jump_list() end)
 vim.keymap.set("n", "<leader>jj", function() j:picker() end)
