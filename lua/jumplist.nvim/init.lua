@@ -30,8 +30,10 @@ local function filter(t, cb)
 end
 
 
+local M = {}
 
-function Setup()
+
+function M.setup()
   local Jump_list = {
 
     Jumplist = {},
@@ -135,5 +137,6 @@ function Setup()
   return Jump_list
 end
 
+return M
 
 
