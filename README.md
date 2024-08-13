@@ -1,9 +1,9 @@
-# this is a jumpllist plugin for neovim;
+# This is a jumpllist plugin for neovim;
 
 
-## configuration
+## Configuration
 
-config is easy enough just require jumplist and run the setup function
+Config is easy enough just require jumplist and run the setup function
 then bind the methods to the keymap you like.
 
 - add_to_jump_list
