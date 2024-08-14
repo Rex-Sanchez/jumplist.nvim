@@ -14,10 +14,10 @@ then bind the methods to the keymap you like.
 
 - picker
     This opens a telescope picker,
-    - <C-r> rename,
-    - <C-d> remove the selected item,
-    - <C-x> clear jumplist,
-    - <CR> jump to the file at line and col,
+    - \<C-r\> rename,
+    - \<C-d\> remove the selected item,
+    - \<C-x\> clear jumplist,
+    - \<CR\>  jump to the file at line and col,
 
 ```lua
 local j = require("jumplist").setup({});
