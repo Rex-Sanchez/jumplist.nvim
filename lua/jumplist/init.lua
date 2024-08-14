@@ -46,6 +46,7 @@ function M.setup(user_opts)
   local map = user_opts.map or {};
 
   local opts = {
+    auto_rename = user_opts.auto_rename or true,
     map = {
       rename = map.rename or "<C-r>",
       remove = map.remove or "<C-d>",
@@ -56,6 +57,10 @@ function M.setup(user_opts)
   local Jump_list = {
 
     Jumplist = {},
+    opts = {
+      auto_rename = opts.auto_rename,
+      map = opts.map
+    },
 
     picker = function(self)
       pickers.new({}, {
@@ -79,12 +84,12 @@ function M.setup(user_opts)
             actions.close(pb)
             self.open_from_jumplist_at_index(selected.ordinal);
           end)
-          map({ 'n', 'i' }, opts.map.remove, function()
+          map({ 'n', 'i' }, self.opts.map.remove, function()
             local selected = action_state.get_selected_entry();
             self.Jumplist = filter(self.Jumplist, function(i) return i.id ~= selected.ordinal.id end)
             actions.close(pb)
           end)
-          map({ 'n', 'i' }, opts.map.rename, function()
+          map({ 'n', 'i' }, self.opts.map.rename, function()
             local selected = action_state.get_selected_entry();
             vim.print("rename selected")
             local name = take_input("Enter new name: ");
@@ -95,7 +100,7 @@ function M.setup(user_opts)
             end
             actions.close(pb)
           end)
-          map({ 'n', 'i' }, opts.map.clear_all, function()
+          map({ 'n', 'i' }, self.opts.map.clear_all, function()
             self.Jumplist = {};
             actions.close(pb)
           end)
@@ -111,13 +116,18 @@ function M.setup(user_opts)
       math.randomseed(os.time());
 
 
+      local name = "";
+      if self.opts.auto_rename then
+        name = take_input("Enter a name");
+      end
+
       local jump_list = {
         id = math.random(1, 99999999),
         row = r,
         col = c,
         file = file,
         local_file = vim.fn.expand("%"),
-        name = take_input("Enter a name: "),
+        name = name,
       };
 
 

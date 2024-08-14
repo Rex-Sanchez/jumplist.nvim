@@ -30,6 +30,8 @@ the following are the default options. change them to what you like,
 
 ```lua
 local opts = {
+    -- set this to false if you dont want a prompt when adding a new jump to the list
+    auto_rename = true,
     map = {
       rename = "<C-r>",
       remove = "<C-d>",
