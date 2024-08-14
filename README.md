@@ -33,6 +33,7 @@ local opts = {
     -- set this to false if you dont want a prompt when adding a new jump to the list
     auto_rename = true,
     map = {
+      close = "<C-c>",
       rename = "<C-r>",
       remove = "<C-d>",
       clear_all = "<C-x>",

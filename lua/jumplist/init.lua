@@ -48,6 +48,7 @@ function M.setup(user_opts)
   local opts = {
     auto_rename = user_opts.auto_rename or true,
     map = {
+      close = map.close or "<C-c>",
       rename = map.rename or "<C-r>",
       remove = map.remove or "<C-d>",
       clear_all = map.clear_all or "<C-x>",
@@ -89,9 +90,12 @@ function M.setup(user_opts)
             self.Jumplist = filter(self.Jumplist, function(i) return i.id ~= selected.ordinal.id end)
             actions.close(pb)
           end)
+          map({ 'n', 'i' }, self.opts.map.close, function()
+            actions.close(pb)
+          end)
+
           map({ 'n', 'i' }, self.opts.map.rename, function()
             local selected = action_state.get_selected_entry();
-            vim.print("rename selected")
             local name = take_input("Enter new name: ");
             for i, _ in ipairs(self.Jumplist) do
               if self.Jumplist[i].id == selected.ordinal.id then
@@ -116,20 +120,18 @@ function M.setup(user_opts)
       math.randomseed(os.time());
 
 
-      local name = "";
-      if self.opts.auto_rename then
-        name = take_input("Enter a name");
-      end
-
       local jump_list = {
         id = math.random(1, 99999999),
         row = r,
         col = c,
         file = file,
         local_file = vim.fn.expand("%"),
-        name = name,
+        name = "",
       };
 
+      if self.opts.auto_rename then
+        jump_list.name = take_input("Enter a name");
+      end
 
       table.insert(self.Jumplist, jump_list);
       vim.print("Jumplist Item Added")
@@ -140,7 +142,6 @@ function M.setup(user_opts)
       if (jump ~= nil) then
         vim.cmd("edit " .. jump.file);
         vim.api.nvim_win_set_cursor(0, { jump.row, jump.col })
-        vim.print("\nOpening File from jumplist @ Line: " .. jump.row .. " | Col: " .. jump.col);
       end
     end,
 
