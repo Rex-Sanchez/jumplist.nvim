@@ -42,11 +42,9 @@ local M = {}
 
 
 function M.setup(user_opts)
-
   local map = user_opts.map or {};
-
   local opts = {
-    auto_rename = user_opts.auto_rename or true,
+    auto_rename = true,
     map = {
       close = map.close or "<C-c>",
       rename = map.rename or "<C-r>",
@@ -54,6 +52,10 @@ function M.setup(user_opts)
       clear_all = map.clear_all or "<C-x>",
     }
   }
+
+  if user_opts.auto_rename == false then
+    opts.auto_rename = false;
+  end
 
   local Jump_list = {
 
