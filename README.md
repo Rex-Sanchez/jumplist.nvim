@@ -1,5 +1,12 @@
 # This is a jumpllist plugin for neovim;
 
+## Installation
+Add this to your package manager
+
+```lua
+'Rex-Sanchez/jumplist.nvim'
+```
+
 ## deps
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim/tree/master)
 
@@ -32,10 +39,15 @@ the following are the default options. change them to what you like,
 local opts = {
     -- set this to false if you dont want a prompt when adding a new jump to the list
     auto_rename = true,
+    -- Picker controls
     map = {
+      -- This closes the picker
       close = "<C-c>",
+      -- This renames the current selected jumplist
       rename = "<C-r>",
+      -- This removes the current selected jumplist
       remove = "<C-d>",
+      -- This clears the entire jumplist
       clear_all = "<C-x>",
     }
   }

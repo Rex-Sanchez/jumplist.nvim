@@ -87,6 +87,7 @@ function M.setup(user_opts)
             actions.close(pb)
             self.open_from_jumplist_at_index(selected.ordinal);
           end)
+
           map({ 'n', 'i' }, self.opts.map.remove, function()
             local selected = action_state.get_selected_entry();
             self.Jumplist = filter(self.Jumplist, function(i) return i.id ~= selected.ordinal.id end)
@@ -106,6 +107,7 @@ function M.setup(user_opts)
             end
             actions.close(pb)
           end)
+
           map({ 'n', 'i' }, self.opts.map.clear_all, function()
             self.Jumplist = {};
             actions.close(pb)
@@ -124,6 +126,7 @@ function M.setup(user_opts)
 
       local jump_list = {
         id = math.random(1, 99999999),
+        buffer_nr = vim.api.nvim_get_current_buf(),
         row = r,
         col = c,
         file = file,
@@ -142,7 +145,7 @@ function M.setup(user_opts)
 
     open_from_jumplist_at_index = function(jump)
       if (jump ~= nil) then
-        vim.cmd("edit " .. jump.file);
+        vim.cmd("buffer " .. jump.buffer_nr);
         vim.api.nvim_win_set_cursor(0, { jump.row, jump.col })
       end
     end,
