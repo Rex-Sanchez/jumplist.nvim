@@ -141,7 +141,7 @@ function M.setup(user_opts)
       end
 
       table.insert(self.Jumplist, jump_list);
-      vim.print("Jumplist Item Added")
+      vim.print("[ line: " .. r .. " col: " .. c .. " ]: " .. jump_list.local_file .. " | Added"   )
     end,
 
 
