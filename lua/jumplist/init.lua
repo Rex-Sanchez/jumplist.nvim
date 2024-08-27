@@ -100,9 +100,11 @@ function M.setup(user_opts)
           map({ 'n', 'i' }, self.opts.map.rename, function()
             local selected = action_state.get_selected_entry();
             local name = take_input("Enter new name: ");
-            for i, _ in ipairs(self.Jumplist) do
-              if self.Jumplist[i].id == selected.ordinal.id then
-                self.Jumplist[i].name = name;
+            if name ~= "" then
+              for i, _ in ipairs(self.Jumplist) do
+                if self.Jumplist[i].id == selected.ordinal.id then
+                  self.Jumplist[i].name = name;
+                end
               end
             end
             actions.close(pb)
