@@ -132,7 +132,7 @@ function M.setup(user_opts)
       };
 
       if self.opts.auto_rename then
-        jump_list.name = take_input("Enter a name");
+        jump_list.name = take_input("Enter a name: ");
       end
 
       table.insert(self.Jumplist, jump_list);
